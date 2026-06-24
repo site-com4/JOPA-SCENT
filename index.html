@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOPA SCENT | Luxury Fragrance</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@1,700&family=Montserrat:wght@300;400;600&family=Dancing+Script:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+    /* --- BASE --- */
+    * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+    body { margin: 0; background: #050505; color: #f5f5f5; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    /* --- FULL SCREEN BACKGROUND ANIMATIONS --- */
+    .bg-animation-container { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+
+    /* 1. FALLING PERFUME NAMES */
+    .falling-word {
+        position: absolute; top: -100px; font-family: 'Great Vibes', 'Dancing Script', cursive; font-size: 2rem;
+        opacity: 0.15; color: #d4af37; animation: fallDown linear infinite; pointer-events: none; z-index: 0;
+    }
+    @keyframes fallDown {
+        0% { transform: translateY(-50px) rotate(0deg); opacity: 0.2; }
+        10% { opacity: 0.3; } 90% { opacity: 0.3; }
+        100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* 2. PERFUME SPRAY PARTICLES */
+    .spray-particle {
+        position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
+        animation: floatParticle linear infinite; pointer-events: none; z-index: 0; mix-blend-mode: screen;
+    }
+    @keyframes floatParticle {
+        0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.6; } 90% { opacity: 0.6; }
+        100% { transform: translateY(-20vh) scale(1.5) rotate(720deg); opacity: 0; }
+    }
+
+    /* --- CINEMATIC CURTAINS & LOGO --- */
+    #curtain-wrapper {
+        position: fixed; inset: 0; z-index: 9999; background: #080808; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; pointer-events: none;
+        animation: fadeOutCurtain 1s ease-in-out 3.5s forwards;
+    }
+    #curtain-wrapper h1 { font-family: 'Cinzel', serif; font-size: 6rem; color: #d4af37; margin: 0; letter-spacing: 4px; text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); animation: revealLogo 1.5s ease-out forwards; transform: scale(0.9); opacity: 0; }
+    #curtain-wrapper p { font-family: 'Cinzel', serif; font-size: 1.2rem; color: #999; letter-spacing: 8px; text-transform: uppercase; animation: revealLogo 1.5s ease-out 0.5s forwards; opacity: 0; }
+    @keyframes revealLogo { 100% { transform: scale(1); opacity: 1; } }
+    @keyframes fadeOutCurtain { 100% { opacity: 0; z-index: -1; pointer-events: none; } }
+
+    .curtain-container { position: fixed; inset: 0; z-index: 10000; display: flex; pointer-events: none; animation: fadeOutCurtain 0.8s ease-in-out 3.7s forwards; }
+    .curtain-side { width: 50%; height: 100%; background: #111; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); border-right: 2px solid #d4af37; border-left: 2px solid #d4af37; position: relative; overflow: hidden; }
+    .curtain-side::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(212, 175, 55, 0.05) 20px, rgba(212, 175, 55, 0.05) 21px); }
+    .curtain-left { transform-origin: left center; animation: unfoldLeft 1.5s ease-in-out 2s forwards; }
+    .curtain-right { transform-origin: right center; animation: unfoldRight 1.5s ease-in-out 2s forwards; }
+    @keyframes unfoldLeft { 0% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+    @keyframes unfoldRight { 0% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+
+    /* --- HEADER --- */
+    header { position: relative; z-index: 10; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(8px); padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #d4af37; position: sticky; top: 0; z-index: 999; }
+    .logo { font-family: 'Cinzel', serif; font-size: 2.5rem; letter-spacing: 2px; background: linear-gradient(90deg, #d4af37, #ff00ff, #00ffff, #ffffff, #d4af37); background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: colorSmooth 6s ease-in-out infinite; }
+    @keyframes colorSmooth { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    .cart-icon { color: #d4af37; cursor: pointer; font-weight: bold; font-size: 1.5rem; position: relative; transition: 0.3s; z-index: 10; }
+    .cart-count { position: absolute; top: -5px; right: -10px; background: #e74c3c; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; }
+
+    /* --- HERO --- */
+    .hero { position: relative; z-index: 5; height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1596464716127-f9a085b8e1e2?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat fixed; overflow: hidden; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: 4rem; color: #d4af37; opacity: 0.8; font-style: italic; text-shadow: 0 0 30px rgba(0,0,0,0.8); position: relative; z-index: 2; }
+
+    /* --- CONTAINER --- */
+    .container { position: relative; z-index: 5; max-width: 1400px; width: 95%; margin: auto; padding: 20px 0 120px 0; }
+
+    /* --- CATEGORY HEADERS --- */
+    .cat-header-wrapper { display: flex; align-items: center; justify-content: flex-start; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+    .cat-group-title { font-family: 'Cinzel', serif; font-size: 2.5rem; margin: 0; display: inline-block; background: linear-gradient(270deg, #d4af37, #fff, #e91e63, #5dade2, #d4af37); background-size: 400% 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: colorShift 8s ease-in-out infinite; letter-spacing: 2px; }
+    @keyframes colorShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    
+    /* --- GRID & CARDS --- */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px; position: relative; z-index: 2; }
+    .card { background: rgba(18, 18, 18, 0.85); border: 1px solid #222; border-radius: 15px; padding: 15px; text-align: center; transition: 0.3s; backdrop-filter: blur(5px); }
+    .card:hover { border-color: #d4af37; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    
+    .pic-box { width: 100%; height: 150px; border-radius: 20px; margin-bottom: 10px; background: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; color: #555; border: 3px solid #d4af37; animation: borderGlow 6s linear infinite; overflow: hidden; }
+    .pic-box img { width: 100%; height: 100%; object-fit: contain; border-radius: 17px; display: block; }
+    @keyframes borderGlow { 0% { border-color: #d4af37; box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2); } 25% { border-color: #e91e63; } 50% { border-color: #5dade2; } 75% { border-color: #e67e22; } 100% { border-color: #d4af37; } }
+    
+    .card h3 { font-size: 1rem; margin: 5px 0 12px 0; font-weight: 400; min-height: 40px; display: flex; align-items: center; justify-content: center; animation: textTransition 8s linear infinite; font-family: 'Cinzel', serif; }
+    @keyframes textTransition { 0% { color: #d4af37; } 33% { color: #ffffff; } 66% { color: #f1c40f; } 100% { color: #d4af37; } }
+
+    .btn-cart { background: transparent; border: 1px solid #d4af37; color: #d4af37; padding: 6px 0; width: 100%; border-radius: 30px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+    .btn-cart:hover { background: #d4af37; color: #000; }
+
+    /* --- "MORE..." BUTTON AT THE END --- */
+    .category-footer-wrapper { display: flex; justify-content: flex-end; margin-bottom: 50px; margin-top: 20px; }
+    .btn-more { font-family: 'Dancing Script', cursive; font-size: 1.2rem; font-weight: bold; background: transparent; border: 1px solid #d4af37; color: #d4af37; padding: 8px 25px; border-radius: 30px; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+    .btn-more:hover { background: #d4af37; color: #000; transform: scale(1.05); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+
+    /* --- ROBOT --- */
+    .robot-mascot { position: fixed; bottom: 20px; right: 20px; width: 80px; height: 150px; z-index: 900; pointer-events: none; display: flex; justify-content: center; }
+    .robot-group { animation: floatY 3.5s ease-in-out infinite; position: relative; width: 100%; height: 100%; transform: scale(0.6); transform-origin: bottom right; }
+    @keyframes floatY { 0% { transform: scale(0.6) translateY(0); } 50% { transform: scale(0.6) translateY(-10px); } 100% { transform: scale(0.6) translateY(0); } }
+    .r-head { width: 70px; height: 70px; background: radial-gradient(circle at 30% 30%, #333, #000); border-radius: 50%; border: 2px solid #00ffff; box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.2), 0 0 15px rgba(0, 255, 255, 0.2); position: absolute; top: 0; left: 5px; display: flex; justify-content: center; align-items: center; }
+    .r-eye { width: 15px; height: 15px; background: #00ffff; border-radius: 50%; box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff; margin: 0 4px; animation: pulseEye 1.5s ease-in-out infinite; }
+    @keyframes pulseEye { 0% { box-shadow: 0 0 10px #00ffff; } 50% { box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff; } 100% { box-shadow: 0 0 10px #00ffff; } }
+    .r-neck { width: 20px; height: 10px; background: #222; border: 1px solid #00ffff; position: absolute; top: 65px; left: 30px; border-radius: 3px; }
+    .r-body { width: 70px; height: 60px; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 2px solid #ff00ff; border-radius: 10px 10px 3px 3px; position: absolute; top: 75px; left: 5px; box-shadow: inset 0 0 15px rgba(255, 0, 255, 0.2); display: flex; justify-content: center; align-items: center; }
+    .r-chest-screen { width: 65%; height: 20px; background: #000; border: 1px solid #ff00ff; border-radius: 5px; display: flex; justify-content: center; align-items: center; overflow: hidden; box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.4); }
+    .chest-text { font-family: 'Dancing Script', cursive; font-size: 0.7rem; color: #fff; white-space: nowrap; animation: scrollText 10s linear infinite; }
+    @keyframes scrollText { 0% { transform: translateX(100%); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(-100%); opacity: 0; } }
+    .r-legs { position: absolute; bottom: 0; left: 5px; width: 70px; display: flex; justify-content: space-between; }
+    .r-leg { width: 20px; height: 25px; background: linear-gradient(to bottom, #1a1a1a, #333); border: 1px solid #00ffff; border-radius: 0 0 5px 5px; box-shadow: 0 0 10px rgba(0, 255, 255, 0.2); }
+    .r-leg-left { animation: legSwing 2s ease-in-out infinite alternate; transform-origin: top center; }
+    .r-leg-right { animation: legSwing 2s ease-in-out infinite alternate-reverse; transform-origin: top center; }
+    @keyframes legSwing { 0% { transform: rotate(-10deg); } 100% { transform: rotate(10deg); } }
+    .robot-speech { position: absolute; top: -30px; right: -30px; width: 110px; background: rgba(0,0,0,0.9); border: 1px solid #ff00ff; padding: 5px 8px; border-radius: 10px 10px 0 10px; font-size: 0.6rem; color: #fff; font-family: 'Dancing Script', cursive; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transition: opacity 1s; box-shadow: 0 5px 15px rgba(0,0,0,0.8); pointer-events: none; }
+    .robot-speech.active { opacity: 1; }
+
+    /* --- FLOATING BUTTONS --- */
+    .floating-action-buttons { position: fixed; bottom: 20px; right: 110px; z-index: 901; display: flex; flex-direction: column; gap: 8px; pointer-events: auto; animation: fadeInOutButtons 10s ease-in-out infinite; }
+    @keyframes fadeInOutButtons { 0% { opacity: 0; transform: translateY(20px); } 10% { opacity: 1; transform: translateY(0); } 50% { opacity: 1; } 60% { opacity: 0; transform: translateY(20px); } 100% { opacity: 0; } }
+    .r-btn { padding: 6px 12px; border: none; border-radius: 20px; font-weight: bold; font-size: 0.7rem; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; display: block; box-shadow: 0 5px 15px rgba(0,0,0,0.8); pointer-events: auto; }
+    .r-btn-contact { background: #d4af37; color: #000; border: 1px solid #fff; }
+    .r-btn-order { background: #ff00ff; color: #fff; border: 1px solid #00ffff; box-shadow: 0 0 20px rgba(255, 0, 255, 0.4); }
+    .r-btn:hover { transform: scale(1.1); filter: brightness(1.2); }
+
+    /* --- SHOPPING CART --- */
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(5px); }
+    .cart-sidebar { position: fixed; top: 0; right: -400px; width: 380px; height: 100vh; background: #141414; border-left: 2px solid #d4af37; z-index: 2001; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; padding: 25px; box-shadow: -10px 0 30px rgba(0,0,0,0.9); }
+    .cart-sidebar.open { right: 0; }
+    @media (max-width: 600px) { .cart-sidebar { width: 100%; right: -100%; } }
+    .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #d4af37; padding-bottom: 15px; margin-bottom: 20px; }
+    .cart-header h2 { font-family: 'Cinzel', serif; color: #d4af37; margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.8rem; }
+    .bag-icon { font-size: 2rem; color: #d4af37; }
+    .cart-subtext { font-size: 0.8rem; color: #888; letter-spacing: 1px; display: block; margin-top: 5px; font-family: 'Montserrat', sans-serif; font-weight: 300; }
+    .close-cart { background: none; border: 1px solid #333; color: #fff; font-size: 1.2rem; cursor: pointer; width: 35px; height: 35px; border-radius: 50%; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+    .close-cart:hover { border-color: #e74c3c; color: #e74c3c; transform: rotate(90deg); }
+    .cart-items { flex: 1; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); margin-bottom: 10px; padding: 12px; border-radius: 12px; border-left: 3px solid #d4af37; transition: 0.3s; }
+    .cart-item:hover { background: rgba(255,255,255,0.06); }
+    .cart-item-info { flex: 1; }
+    .cart-item-info h4 { margin: 0; font-size: 1rem; font-weight: 500; color: #fff; }
+    .cart-item-info span { color: #888; font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 2px 10px; border-radius: 12px; border: 1px solid #333; display: inline-block; margin-top: 4px; }
+    .remove-item { background: none; border: 1px solid #333; color: #e74c3c; cursor: pointer; font-size: 0.8rem; font-weight: bold; padding: 5px 10px; border-radius: 15px; transition: 0.3s; }
+    .remove-item:hover { background: #e74c3c; color: #fff; border-color: #e74c3c; transform: scale(1.05); }
+    .cart-footer { border-top: 1px solid #333; padding-top: 20px; margin-top: 10px; }
+    .btn-order { display: block; width: 100%; padding: 15px; border: none; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; text-align: center; background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; box-shadow: 0 5px 20px rgba(37,211,102,0.3); transition: 0.3s; letter-spacing: 1px; }
+    .btn-order:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37,211,102,0.5); }
+
+    footer { position: relative; z-index: 5; background: #0a0a0a; text-align: center; padding: 40px; border-top: 2px solid #d4af37; margin-top: 60px; }
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND ANIMATIONS -->
+<div class="bg-animation-container" id="bgContainer"></div>
+
+<!-- CURTAIN ANIMATION -->
+<div id="curtain-wrapper"><h1>JOPA SCENT</h1><p>Luxury Fragrance Collection</p></div>
+<div class="curtain-container"><div class="curtain-side curtain-left"></div><div class="curtain-side curtain-right"></div></div>
+
+<!-- HEADER -->
+<header>
+    <div class="logo">JOPA SCENT</div>
+    <div class="cart-icon" onclick="openCart()">🛒 <span class="cart-count" id="cart-count">0</span></div>
+</header>
+
+<!-- HERO -->
+<section class="hero"><h1>Elegance in Every Drop</h1></section>
+
+<!-- PRODUCTS -->
+<div class="container">
+    
+    <!-- 1. ANTIPERSPIRANT -->
+    <div class="cat-header-wrapper"><h2 class="cat-group-title">💧 Antiperspirant</h2></div>
+    <div class="grid">
+        <div class="card"><div class="pic-box"><img src="Sure Men.jpeg"></div><h3>Sure Men</h3><button class="btn-cart" onclick="addToCart('Sure Men')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Sure Women.png"></div><h3>Sure Women</h3><button class="btn-cart" onclick="addToCart('Sure Women')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Nivea.png"></div><h3>Nivea</h3><button class="btn-cart" onclick="addToCart('Nivea')">Add to Cart</button></div>
+    </div>
+    <div class="category-footer-wrapper"><a href="https://wa.me/2349064757641?text=I%20want%20to%20see%20more%20Antiperspirants" target="_blank" class="btn-more">More...</a></div>
+
+    <!-- 2. BODY SPRAY -->
+    <div class="cat-header-wrapper"><h2 class="cat-group-title">🌬️ Body Spray</h2></div>
+    <div class="grid">
+        <div class="card"><div class="pic-box"><img src="Riggs Spray.png"></div><h3>Riggs Spray</h3><button class="btn-cart" onclick="addToCart('Riggs Spray')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Storm Elixir.jpeg"></div><h3>Storm Elixir</h3><button class="btn-cart" onclick="addToCart('Storm Elixir')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Storm Elixir.png"></div><h3>Storm Elixir (Alt)</h3><button class="btn-cart" onclick="addToCart('Storm Elixir Alt')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Confetti.png"></div><h3>Confetti</h3><button class="btn-cart" onclick="addToCart('Confetti')">Add to Cart</button></div>
+    </div>
+    <div class="category-footer-wrapper"><a href="https://wa.me/2349064757641?text=I%20want%20to%20see%20more%20Body%20Sprays" target="_blank" class="btn-more">More...</a></div>
+
+    <!-- 3. BODY MIST -->
+    <div class="cat-header-wrapper"><h2 class="cat-group-title">🌸 Body Mist</h2></div>
+    <div class="grid">
+        <div class="card"><div class="pic-box"><img src="Avant.png"></div><h3>Avant</h3><button class="btn-cart" onclick="addToCart('Avant')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Sahib.png"></div><h3>Sahib</h3><button class="btn-cart" onclick="addToCart('Sahib')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="24K.jpg"></div><h3>24K</h3><button class="btn-cart" onclick="addToCart('24K')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Candy Crush.jpg"></div><h3>Candy Crush</h3><button class="btn-cart" onclick="addToCart('Candy Crush')">Add to Cart</button></div>
+    </div>
+    <div class="category-footer-wrapper"><a href="https://wa.me/2349064757641?text=I%20want%20to%20see%20more%20Body%20Mists" target="_blank" class="btn-more">More...</a></div>
+
+    <!-- 4. OIL PERFUME -->
+    <div class="cat-header-wrapper"><h2 class="cat-group-title">🧴 Oil Perfume</h2></div>
+    <div class="grid">
+        <div class="card"><div class="pic-box"><img src="Mousuf Oil.png"></div><h3>Mousuf Oil</h3><button class="btn-cart" onclick="addToCart('Mousuf Oil')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Mousuf.jpeg"></div><h3>Mousuf</h3><button class="btn-cart" onclick="addToCart('Mousuf')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Burhan Oil.png"></div><h3>Burhan Oil</h3><button class="btn-cart" onclick="addToCart('Burhan Oil')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Oud De Arabia.jpg"></div><h3>Oud De Arabia</h3><button class="btn-cart" onclick="addToCart('Oud De Arabia')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Karamel.jpg"></div><h3>Karamel</h3><button class="btn-cart" onclick="addToCart('Karamel')">Add to Cart</button></div>
+    </div>
+    <div class="category-footer-wrapper"><a href="https://wa.me/2349064757641?text=I%20want%20to%20see%20more%20Oil%20Perfumes" target="_blank" class="btn-more">More...</a></div>
+
+    <!-- 5. PERFUME -->
+    <div class="cat-header-wrapper"><h2 class="cat-group-title">✨ Perfume</h2></div>
+    <div class="grid">
+        <div class="card"><div class="pic-box"><img src="Riggs Perfume.png"></div><h3>Riggs Perfume</h3><button class="btn-cart" onclick="addToCart('Riggs Perfume')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Matelot.jpeg"></div><h3>Matelot</h3><button class="btn-cart" onclick="addToCart('Matelot')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Lattafa Khamrah.png"></div><h3>Lattafa Khamrah</h3><button class="btn-cart" onclick="addToCart('Lattafa Khamrah')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Lattafa Yara Moi.png"></div><h3>Lattafa Yara Moi</h3><button class="btn-cart" onclick="addToCart('Lattafa Yara Moi')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Lattafa Yaya Pink.png"></div><h3>Lattafa Yaya Pink</h3><button class="btn-cart" onclick="addToCart('Lattafa Yaya Pink')">Add to Cart</button></div>
+        <div class="card"><div class="pic-box"><img src="Lattafa Asad.jpg"></div><h3>Lattafa Asad</h3><button class="btn-cart" onclick="addToCart('Lattafa Asad')">Add to Cart</button></div>
+    </div>
+    <div class="category-footer-wrapper"><a href="https://wa.me/2349064757641?text=I%20want%20to%20see%20more%20Perfumes" target="_blank" class="btn-more">More...</a></div>
+
+</div>
+
+<!-- ROBOT -->
+<div class="robot-mascot">
+    <div class="robot-group">
+        <div class="robot-speech" id="robotSpeech">Welcome!</div>
+        <div class="r-head"><div class="r-eye"></div><div class="r-eye"></div></div>
+        <div class="r-neck"></div>
+        <div class="r-body"><div class="r-chest-screen"><div class="chest-text" id="chestText">Lattafa 9PM</div></div></div>
+        <div class="r-legs"><div class="r-leg r-leg-left"></div><div class="r-leg r-leg-right"></div></div>
+    </div>
+</div>
+
+<!-- FLOATING BUTTONS -->
+<div class="floating-action-buttons">
+    <a href="https://wa.me/2349064757641?text=Hello%20JOPA%20SCENT%20I%20Have%20An%20Order" target="_blank" class="r-btn r-btn-contact">💬 Contact Us</a>
+    <button onclick="directOrder()" class="r-btn r-btn-order">📦 Place Order</button>
+</div>
+
+<!-- SHOPPING CART -->
+<div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+<div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <div>
+            <h2><span class="bag-icon">🛍️</span> Your Bag</h2>
+            <span class="cart-subtext">Items in your cart</span>
+        </div>
+        <button class="close-cart" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+        <p style="color:#666; text-align:center; margin-top:50px; font-size:0.9rem;">Your shopping bag is empty.</p>
+    </div>
+    <div class="cart-footer">
+        <button class="btn-order" onclick="orderOnWhatsApp()">📱 Checkout via WhatsApp</button>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <h2 style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 2.5rem; margin:0;">JOPA SCENT</h2>
+    <p style="color: #888;">Premium Fragrances</p>
+</footer>
+
+<script>
+    // --- BACKGROUND FALLING NAMES ---
+    const wordList = ["Lattafa", "Asad", "Karamel", "Mousuf", "Sahib", "Nivea", "Burhan", "Mouselot", "Oud", "Storm", "Confetti", "Riggs", "24K"];
+    const bgContainer = document.getElementById('bgContainer');
+    for(let i = 0; i < 35; i++) {
+        let word = document.createElement('div'); word.className = 'falling-word';
+        word.textContent = wordList[Math.floor(Math.random() * wordList.length)];
+        word.style.left = Math.random() * 100 + '%';
+        word.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+        word.style.animationDuration = (Math.random() * 15 + 10) + 's';
+        word.style.animationDelay = (Math.random() * 20) + 's';
+        const colors = ['#d4af37', '#ff00ff', '#00ffff', '#ffffff'];
+        word.style.color = colors[Math.floor(Math.random() * colors.length)];
+        bgContainer.appendChild(word);
+    }
+    for(let i = 0; i < 15; i++) {
+        let particle = document.createElement('div'); particle.className = 'spray-particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.width = (Math.random() * 20 + 10) + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+        particle.style.animationDelay = (Math.random() * 20) + 's';
+        bgContainer.appendChild(particle);
+    }
+
+    // --- ROBOT LOGIC ---
+    const perfumeList = ["Mousuf", "24K", "Storm Elixir", "Confetti", "Riggs Spray", "Oud", "Karamel", "Burhan", "Asad", "Lattafa", "Mouselot", "Sahib", "Nivea", "Avant"];
+    let index = 0; const chestText = document.getElementById('chestText'); const robotSpeech = document.getElementById('robotSpeech');
+    setInterval(() => {
+        chestText.style.animation = 'none'; chestText.offsetHeight; 
+        chestText.textContent = perfumeList[index % perfumeList.length];
+        chestText.style.animation = 'scrollText 10s linear infinite'; index++;
+    }, 10000);
+    const introMessages = ["Welcome to JOPA SCENT!", "Explore our luxury scents!", "Ask us about our oils!", "Find your signature fragrance!", "We deliver premium perfumes!"];
+    let msgIndex = 0;
+    setInterval(() => {
+        robotSpeech.classList.remove('active');
+        setTimeout(() => {
+            robotSpeech.textContent = introMessages[msgIndex % introMessages.length];
+            robotSpeech.classList.add('active'); msgIndex++;
+        }, 500);
+    }, 8000);
+    robotSpeech.classList.add('active');
+
+    // --- CART LOGIC ---
+    let cart = []; const phoneNumber = "2349064757641";
+    function addToCart(name) {
+        const existing = cart.find(item => item.name === name);
+        if(existing) existing.qty++; else cart.push({name, qty:1});
+        updateCart(); openCart();
+    }
+    function removeFromCart(i) { cart.splice(i, 1); updateCart(); }
+    function updateCart() {
+        const itemsDiv = document.getElementById('cart-items');
+        const countSpan = document.getElementById('cart-count');
+        let count=0, html='';
+        cart.forEach((item, i) => {
+            count += item.qty;
+            html += `<div class="cart-item"><div class="cart-item-info"><h4>${item.name}</h4><span>Qty: ${item.qty}</span></div><button class="remove-item" onclick="removeFromCart(${i})">Remove</button></div>`;
+        });
+        itemsDiv.innerHTML = cart.length ? html : `<p style="color:#666; text-align:center; margin-top:50px; font-size:0.9rem;">Your shopping bag is empty.</p>`;
+        countSpan.textContent = count;
+    }
+    function openCart() { document.getElementById('cart-overlay').style.display = 'block'; document.getElementById('cart-sidebar').classList.add('open'); }
+    function closeCart() { document.getElementById('cart-overlay').style.display = 'none'; document.getElementById('cart-sidebar').classList.remove('open'); }
+    function orderOnWhatsApp() {
+        if (!cart.length) return alert("Add items first!");
+        let msg = "Hello JOPA SCENT! I want to order:\n\n";
+        cart.forEach(item => msg += `• ${item.name} (x${item.qty})\n`);
+        window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    function directOrder() {
+        window.open(`https://wa.me/${phoneNumber}?text=Hello%20JOPA%20SCENT%20I%20Have%20An%20Order%0A%0APlease%20write%20the%20names%20below:%0A•%20`, '_blank');
+    }
+</script>
+</body>
+</html>
